@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHubReleaseChecker", "GitHubReleaseChecker\GitHubReleaseChecker.csproj", "{C8758B67-A8AA-4E47-A66B-C2CCFB68013F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHubReleaseCheckerTests", "GitHubReleaseCheckerTests\GitHubReleaseCheckerTests.csproj", "{D0D0101C-C9F4-4611-874A-28F9A9B40913}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8758B67-A8AA-4E47-A66B-C2CCFB68013F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8758B67-A8AA-4E47-A66B-C2CCFB68013F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8758B67-A8AA-4E47-A66B-C2CCFB68013F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8758B67-A8AA-4E47-A66B-C2CCFB68013F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0D0101C-C9F4-4611-874A-28F9A9B40913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0D0101C-C9F4-4611-874A-28F9A9B40913}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0D0101C-C9F4-4611-874A-28F9A9B40913}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0D0101C-C9F4-4611-874A-28F9A9B40913}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
