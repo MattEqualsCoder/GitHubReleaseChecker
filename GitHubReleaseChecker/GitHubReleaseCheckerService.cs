@@ -15,7 +15,7 @@ internal class GitHubReleaseCheckerService : IGitHubReleaseCheckerService
         _gitHubReleaseService = gitHubReleaseService;
     }
 
-    public GitHubRelease? CheckVersion(string owner, string repo, string currentVersion, bool allowPreRelease)
+    public GitHubRelease? GetGitHubReleaseToUpdateTo(string owner, string repo, string currentVersion, bool allowPreRelease)
     {
         if (!IsValidVersion(currentVersion))
         {
@@ -63,7 +63,7 @@ internal class GitHubReleaseCheckerService : IGitHubReleaseCheckerService
             }
         }
         
-        if (IsOutOfDate(currentVersionText, latestVersionText))
+        if (IsCurrentVersionOutOfDate(currentVersionText, latestVersionText))
         {
             return latestRelease;
         }
@@ -74,7 +74,7 @@ internal class GitHubReleaseCheckerService : IGitHubReleaseCheckerService
 
     }
     
-    public bool IsOutOfDate(string currentVersion, string latestVersion)
+    public bool IsCurrentVersionOutOfDate(string currentVersion, string latestVersion)
     {
         var currentVersionBits = currentVersion.Split("-", 2);
         var latestVersionBits = latestVersion.Split("-", 2);
@@ -147,8 +147,8 @@ internal class GitHubReleaseCheckerService : IGitHubReleaseCheckerService
         else
         {
             Regex invalidCharacters = new(@"[^0-9\.]");
-            var latestNumbers = invalidCharacters.Replace(latestVersion, "").Split(".").Select(int.Parse).ToList();
-            var currentNumbers = invalidCharacters.Replace(currentVersion, "").Split(".").Select(int.Parse).ToList();
+            var latestNumbers = invalidCharacters.Replace(latestVersionBits[0], "").Split(".").Select(int.Parse).ToList();
+            var currentNumbers = invalidCharacters.Replace(currentVersionBits[0], "").Split(".").Select(int.Parse).ToList();
 
             for (var i = 0; i < Math.Min(latestNumbers.Count, currentNumbers.Count); i++)
             {
@@ -156,6 +156,11 @@ internal class GitHubReleaseCheckerService : IGitHubReleaseCheckerService
                 {
                     _logger.LogInformation("User version of {Local} is older than GitHub release {Release}", currentVersion, latestVersion);
                     return true;
+                }
+                else if (latestNumbers[i] < currentNumbers[i])
+                {
+                    _logger.LogInformation("User version of {Local} is newer than GitHub release {Release}", currentVersion, latestVersion);
+                    return false;
                 }
             }
 
