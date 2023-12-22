@@ -28,7 +28,7 @@ Host.CreateDefaultBuilder(e.Args)
 var version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
 
 var newerGitHubRelease = _host.Services.GetRequiredService<IGitHubReleaseCheckerService>()
-    .GetGitHubReleaseToUpdateTo("MattEqualsCoder", "TestRepo", version ?? "", false);
+    .GetGitHubReleaseToUpdateToAsync("MattEqualsCoder", "TestRepo", version ?? "", false);
 
 if (newerGitHubRelease != null)
 {

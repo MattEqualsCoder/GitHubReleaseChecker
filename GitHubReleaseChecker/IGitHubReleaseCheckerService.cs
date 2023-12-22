@@ -14,7 +14,8 @@ public interface IGitHubReleaseCheckerService
     /// <param name="allowPreRelease">If pre-releases should be allowed</param>
     /// <param name="timeout">How long before timing out when calling the Github API (default: 5 seconds)</param>
     /// <returns>The GitHub release the user should update to. If none is found, it will return null.</returns>
-    public GitHubRelease? GetGitHubReleaseToUpdateTo(string owner, string repo, string currentVersion, bool allowPreRelease, TimeSpan? timeout = null);
+    public Task<GitHubRelease?> GetGitHubReleaseToUpdateToAsync(string owner, string repo, string currentVersion,
+        bool allowPreRelease, TimeSpan? timeout = null);
 
     /// <summary>
     /// Compares two version numbers to see if the current version is out of date

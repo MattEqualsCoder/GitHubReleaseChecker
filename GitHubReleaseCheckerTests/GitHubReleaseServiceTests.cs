@@ -8,13 +8,13 @@ namespace GitHubReleaseCheckerTests;
 public class GitHubReleaseServiceTests
 {
     [Test]
-    public void TestGetReleases_Success()
+    public async Task TestGetReleases_Success()
     {
         var logger = Mock.Of<ILogger<GitHubReleaseService>>();
 
         var service = new GitHubReleaseService(logger);
 
-        var releases = service.GetReleases("MattEqualsCoder", "MSURandomizer");
+        var releases = await service.GetReleasesAsync("MattEqualsCoder", "MSURandomizer");
         
         Assert.That(releases?.Any() == true);
 
@@ -26,25 +26,25 @@ public class GitHubReleaseServiceTests
     }
     
     [Test]
-    public void TestGetReleases_Invalid()
+    public async Task TestGetReleases_Invalid()
     {
         var logger = Mock.Of<ILogger<GitHubReleaseService>>();
 
         var service = new GitHubReleaseService(logger);
 
-        var releases = service.GetReleases("MattEqualsCoder", "InvalidRepo");
+        var releases = await service.GetReleasesAsync("MattEqualsCoder", "InvalidRepo");
         
         Assert.That(releases, Is.Null);
     }
     
     [Test]
-    public void TestGetReleases_Empty()
+    public async Task TestGetReleases_Empty()
     {
         var logger = Mock.Of<ILogger<GitHubReleaseService>>();
 
         var service = new GitHubReleaseService(logger);
 
-        var releases = service.GetReleases("MattEqualsCoder", "ALttPMSUShuffler");
+        var releases = await service.GetReleasesAsync("MattEqualsCoder", "GitHubReleaseChecker");
         
         Assert.That(releases, Is.Not.Null);
         Assert.That(!releases!.Any());

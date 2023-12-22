@@ -16,7 +16,7 @@ internal class GitHubReleaseCheckerService : IGitHubReleaseCheckerService
         _gitHubReleaseService = gitHubReleaseService;
     }
 
-    public GitHubRelease? GetGitHubReleaseToUpdateTo(string owner, string repo, string currentVersion, bool allowPreRelease, TimeSpan? timeout = null)
+    public async Task<GitHubRelease?> GetGitHubReleaseToUpdateToAsync(string owner, string repo, string currentVersion, bool allowPreRelease, TimeSpan? timeout = null)
     {
         if (!IsValidVersion(currentVersion))
         {
@@ -24,7 +24,7 @@ internal class GitHubReleaseCheckerService : IGitHubReleaseCheckerService
             throw new InvalidOperationException($"Invalid local version format {currentVersion}");
         }
 
-        var releases = _gitHubReleaseService.GetReleases(owner, repo, timeout);
+        var releases = await _gitHubReleaseService.GetReleasesAsync(owner, repo, timeout);
         if (releases == null || !releases.Any())
         {
             _logger.LogWarning("Unable to get GitHub Releases");

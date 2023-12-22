@@ -12,7 +12,7 @@ internal class GitHubReleaseService : IGitHubReleaseService
         _logger = logger;
     }
 
-    public ICollection<GitHubRelease>? GetReleases(string owner, string repo, TimeSpan? timeout = null)
+    public async Task<ICollection<GitHubRelease>?> GetReleasesAsync(string owner, string repo, TimeSpan? timeout = null)
     {
         var apiUrl = $"https://api.github.com/repos/{owner}/{repo}/releases";
 
@@ -24,7 +24,7 @@ internal class GitHubReleaseService : IGitHubReleaseService
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.DefaultRequestHeaders.Add("User-Agent", "GitHubReleaseChecker");
             client.Timeout = timeout ?? TimeSpan.FromSeconds(5);
-            response = client.GetStringAsync(apiUrl).Result;
+            response = await client.GetStringAsync(apiUrl);
         }
         catch (Exception e)
         {

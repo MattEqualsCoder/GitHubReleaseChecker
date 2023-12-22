@@ -113,8 +113,8 @@ public class GitHubReleaseCheckerServiceTests
         }
 
         mockService
-            .Setup(x => x.GetReleases(It.IsAny<string>(), It.IsAny<string>(), null))
-            .Returns(testData);
+            .Setup(x => x.GetReleasesAsync(It.IsAny<string>(), It.IsAny<string>(), null))
+            .ReturnsAsync(testData);
         
         return new GitHubReleaseCheckerService(Mock.Of<ILogger<GitHubReleaseCheckerService>>(), mockService.Object);
     }
@@ -123,29 +123,27 @@ public class GitHubReleaseCheckerServiceTests
     public void TestInvalidVersions()
     {
         var service = GetService(_testData);
-        Assert.Throws<InvalidOperationException>(() => service.GetGitHubReleaseToUpdateTo("a", "b", "a", true));
-        Assert.Throws<InvalidOperationException>(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2.3-", true));
-        Assert.Throws<InvalidOperationException>(() => service.GetGitHubReleaseToUpdateTo("a", "b", "-1.2.3-", true));
+        Assert.ThrowsAsync<InvalidOperationException>(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "a", true));
+        Assert.ThrowsAsync<InvalidOperationException>(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2.3-", true));
+        Assert.ThrowsAsync<InvalidOperationException>(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "-1.2.3-", true));
         
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1+abcd123123", true));
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2", true));
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2-rc.1", true));
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2-rc.1+abcd123123", true));
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2.3", true));
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2.3-1", true));
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2.3-a", true));
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2.3-rc1", true));
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2.3-rc.1", true));
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2.3.4", true));
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2.3.4-rc.1", true));
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2.3.4+abcd123123", true));
-        Assert.DoesNotThrow(() => service.GetGitHubReleaseToUpdateTo("a", "b", "1.2.3.4-rc.1+abcd123123", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1+abcd123123", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2-rc.1", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2-rc.1+abcd123123", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2.3", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2.3-1", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2.3-a", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2.3-rc1", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2.3-rc.1", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2.3.4", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2.3.4-rc.1", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2.3.4+abcd123123", true));
+        Assert.DoesNotThrowAsync(() => service.GetGitHubReleaseToUpdateToAsync("a", "b", "1.2.3.4-rc.1+abcd123123", true));
     }
 
-    
-
     [Test]
-    public void TestCheckVersion()
+    public async Task TestCheckVersion()
     {
         GitHubRelease? version;
 
@@ -153,7 +151,7 @@ public class GitHubReleaseCheckerServiceTests
         var index = 0;
         foreach (var data in _testCases)
         {
-            version = service.GetGitHubReleaseToUpdateTo("a", "b", data.Item1, data.Item3);
+            version = await service.GetGitHubReleaseToUpdateToAsync("a", "b", data.Item1, data.Item3);
             var trackText = data.Item3 ? "pre-release" : "main release";
             if (string.IsNullOrEmpty(data.Item2))
             {
@@ -172,7 +170,7 @@ public class GitHubReleaseCheckerServiceTests
         var suffix = "+abcd1234";
         foreach (var data in _testCases)
         {
-            version = service.GetGitHubReleaseToUpdateTo("a", "b", data.Item1+suffix, data.Item3);
+            version = await service.GetGitHubReleaseToUpdateToAsync("a", "b", data.Item1+suffix, data.Item3);
             var trackText = data.Item3 ? "pre-release" : "main release";
             if (string.IsNullOrEmpty(data.Item2))
             {
@@ -189,7 +187,7 @@ public class GitHubReleaseCheckerServiceTests
     }
     
     [Test]
-    public void TestCheckVersion4Dot()
+    public async Task TestCheckVersion4Dot()
     {
         GitHubRelease? version;
         var service = GetService(_testData4Dot);
@@ -197,7 +195,7 @@ public class GitHubReleaseCheckerServiceTests
         var index = 0;
         foreach (var data in _testCases4Dot)
         {
-            version = service.GetGitHubReleaseToUpdateTo("a", "b", data.Item1, data.Item3);
+            version = await service.GetGitHubReleaseToUpdateToAsync("a", "b", data.Item1, data.Item3);
             var trackText = data.Item3 ? "pre-release" : "main release";
             if (string.IsNullOrEmpty(data.Item2))
             {
@@ -216,7 +214,7 @@ public class GitHubReleaseCheckerServiceTests
         var suffix = "+abcd1234";
         foreach (var data in _testCases4Dot)
         {
-            version = service.GetGitHubReleaseToUpdateTo("a", "b", data.Item1+suffix, data.Item3);
+            version = await service.GetGitHubReleaseToUpdateToAsync("a", "b", data.Item1+suffix, data.Item3);
             var trackText = data.Item3 ? "pre-release" : "main release";
             if (string.IsNullOrEmpty(data.Item2))
             {
@@ -233,7 +231,7 @@ public class GitHubReleaseCheckerServiceTests
     }
     
     [Test]
-    public void TestCheckVersionSuffix()
+    public async Task TestCheckVersionSuffix()
     {
         GitHubRelease? version;
         var service = GetService(_testDataSuffix);
@@ -241,7 +239,7 @@ public class GitHubReleaseCheckerServiceTests
         var index = 0;
         foreach (var data in _testCasesSuffix)
         {
-            version = service.GetGitHubReleaseToUpdateTo("a", "b", data.Item1, data.Item3);
+            version = await service.GetGitHubReleaseToUpdateToAsync("a", "b", data.Item1, data.Item3);
             var trackText = data.Item3 ? "pre-release" : "main release";
             if (string.IsNullOrEmpty(data.Item2))
             {

@@ -12,5 +12,5 @@ public interface IGitHubReleaseService
     /// <param name="repo">The name of the GitHub repository</param>
     /// <param name="timeout">How long before timing out when calling the Github API (default: 5 seconds)</param> 
     /// <returns></returns>
-    public ICollection<GitHubRelease>? GetReleases(string owner, string repo, TimeSpan? timeout = null);
+    public Task<ICollection<GitHubRelease>?> GetReleasesAsync(string owner, string repo, TimeSpan? timeout = null);
 }
