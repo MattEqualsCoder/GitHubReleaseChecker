@@ -91,7 +91,14 @@ public class GitHubReleaseCheckerServiceTests
         ("1.2.4+abcd1234", "", false), // On newer release
         ("1.3+abcd1234", "", false), // On newer release
         ("2+abcd1234", "", false), // On newer release
-        
+    };
+
+    private static List<(string, string, bool)> _olderChecks = new()
+    {
+        ("9.6.0", "9.6.0.1", true),
+        ("9.6.0", "9.6.1", true),
+        ("9.6.0.1", "9.6.0", false),
+        ("9.6.1", "9.6.0", false),
     };
     
     private GitHubReleaseCheckerService GetService(List<(string, bool)> staticTestData)
@@ -252,6 +259,26 @@ public class GitHubReleaseCheckerServiceTests
             }
 
             index++;
+        }
+    }
+
+    [Test]
+    public void TestCheckOlderVersions()
+    {
+        var service = GetService(_testData);
+
+        foreach (var data in _olderChecks)
+        {
+            var result = service.IsCurrentVersionOutOfDate(data.Item1, data.Item2);
+
+            if (data.Item3)
+            {
+                Assert.That(result, Is.EqualTo(data.Item3), $"{data.Item1} is expected to be older than {data.Item2}");
+            }
+            else
+            {
+                Assert.That(result, Is.EqualTo(data.Item3), $"{data.Item2} is expected to be older than {data.Item1}");
+            }
         }
     }
 

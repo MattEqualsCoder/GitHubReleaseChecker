@@ -178,12 +178,12 @@ internal class GitHubReleaseCheckerService : IGitHubReleaseCheckerService
 
             if (latestNumbers.Count > currentNumbers.Count)
             {
-                _logger.LogInformation("User version of {Local} is newer than GitHub release {Release}", currentVersion, latestVersion);
+                _logger.LogInformation("User version of {Local} is older than GitHub release {Release}", currentVersion, latestVersion);
                 return true;
             }
             else if (latestNumbers.Count < currentNumbers.Count)
             {
-                _logger.LogInformation("User version of {Local} is older than GitHub release {Release}", currentVersion, latestVersion);
+                _logger.LogInformation("User version of {Local} is newer than GitHub release {Release}", currentVersion, latestVersion);
                 return false;
             }
         }

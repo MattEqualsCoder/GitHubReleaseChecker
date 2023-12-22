@@ -8,7 +8,7 @@
         <Title>GitHub Release Checker</Title>
         <Authors>MattEqualsCoder</Authors>
         <Description>Uses the public GitHub Releases API to see if there is a newer version.</Description>
-        <Version>1.1.1</Version>
+        <Version>1.1.2</Version>
         <PackageId>MattEqualsCoder.$(AssemblyName)</PackageId>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
